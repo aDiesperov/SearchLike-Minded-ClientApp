@@ -1,0 +1,8 @@
+<div class="input-group mb-3" *ngIf="accessPublish">
+    <input type="text" [(ngModel)]="postText" class="form-control" placeholder="Text" (keyup.enter)="btnPost.click()">
+    <div class="input-group-append">
+        <button class="btn btn-primary" type="button" #btnPost [disabled]="postText.length < 2"
+            (click)="onPost()">Post</button>
+    </div>
+</div>
+<app-post-item *ngFor="let post of posts" [AccessDelelete]='accessPublish' [Post]='post'></app-post-item>

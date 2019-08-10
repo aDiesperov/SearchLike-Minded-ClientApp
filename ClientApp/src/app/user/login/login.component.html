@@ -1,0 +1,17 @@
+<form #form="ngForm" (submit)="onSubmit(form)">
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input name="Email" [(ngModel)]="loginModel.Email" type="email" class="form-control" id="email" placeholder="Enter email" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input name="Password" [(ngModel)]="loginModel.Password" type="password" class="form-control" id="password" placeholder="Password" required>
+    </div>
+    <div class="form-group form-check">
+        <input name="rememberMe" [(ngModel)]="loginModel.RememberMe" type="checkbox" class="form-check-input" id="remember">
+        <label class="form-check-label" for="remember">Remember me?</label>
+    </div>
+    <div class="text-center">
+        <button type="submit" [disabled]="form.invalid" class="btn btn-primary">Sing in</button>
+    </div>
+</form>

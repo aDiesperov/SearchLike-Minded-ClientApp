@@ -1,0 +1,85 @@
+<h2 class="col-10 offset-1 mt-3">Settings</h2>
+<form [formGroup]="service.settingsFormModel" (submit)="onSubmit()" class="col-10 offset-1 my-3">
+    <div class="form-row">
+        <div class="col-4 mb-3">
+            <label for="fname" class="required">First name</label>
+            <input formControlName="fname" type="text" class="form-control" id="fname"
+                placeholder="First name">
+        </div>
+        <div class="col-4 mb-3">
+            <label for="lname" class="required">Last name</label>
+            <input formControlName="lname" type="text" class="form-control" id="lname"
+                placeholder="Last name">
+        </div>
+        <div class="col-4 mb-3">
+            <label for="mname">Middle name</label>
+            <input formControlName="mname" type="text" class="form-control" id="mname"
+                placeholder="Middle name">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-5 mb-3">
+            <label for="birthday" class="required">Birthday</label>
+            <input type="date" formControlName="birthday" class="form-control" id="birthday">
+        </div>
+        <div class="col-5 mb-3 offset-1">
+            <label>Sex</label>
+            <div class="btn-group btn-group-toggle d-block">
+                <label class="btn btn-secondary" [class.active]="service.settingsFormModel.value.sex == 1">
+                    <input formControlName="sex" type="radio" name="sex" id="sexMale" autocomplete="off" value="1">
+                    Male
+                </label>
+                <label class="btn btn-secondary" [class.active]="service.settingsFormModel.value.sex == 2">
+                    <input formControlName="sex" type="radio" name="sex" id="sexFemale" autocomplete="off"
+                        value="2">
+                    Female
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="phoneNumber" class="col-2 col-form-label">Phone number</label>
+        <div class="col-10">
+            <input formControlName="phoneNumber" type="text" class="form-control" id="phoneNumber"
+                placeholder="Phone number">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="hometown" class="col-2 col-form-label">Hometown</label>
+        <div class="col-10">
+            <input formControlName="hometown" type="text" class="form-control" id="hometown"
+                placeholder="Hometown">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="currentCity" class="col-2 col-form-label">Current city</label>
+        <div class="col-10">
+            <input formControlName="currentCity" type="text" class="form-control"
+                id="currentCity" placeholder="Current city">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="institution" class="col-2 col-form-label">Institution</label>
+        <div class="col-10">
+            <input formControlName="institution" type="text" class="form-control"
+                id="institution" placeholder="Institution">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="webSite" class="col-2 col-form-label">WebSite</label>
+        <div class="col-10">
+            <input formControlName="webSite" type="text" class="form-control" id="webSite"
+                placeholder="WebSite">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="aboutMe" class="col-2 col-form-label">About me</label>
+        <div class="col-10">
+            <input formControlName="aboutMe" type="text" class="form-control" id="aboutMe"
+                placeholder="About me">
+        </div>
+    </div>
+    <div class="text-center">
+        <input type="submit" [disabled]="service.settingsFormModel.invalid" class="btn btn-primary" value="Save">
+    </div>
+</form>

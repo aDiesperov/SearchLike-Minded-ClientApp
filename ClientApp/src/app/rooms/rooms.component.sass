@@ -1,0 +1,144 @@
+::ng-deep body
+    background: #a1a1a1
+    
+.wrapper_rooms
+    width: 1140px
+    background: white
+    margin: 0px auto 15px
+    display: flex
+    flex-flow: row
+    flex-wrap: nowrap
+    height: 600px
+    
+    .left_bar
+        flex: 0 0 50px
+        background: #ebf0f2
+        transition: flex-basis .25s
+
+        button
+            width: 175px
+            padding: 8px 0px
+            text-align: left
+            border: 0px
+            background-color: transparent
+
+            i
+                width: 50px
+                text-align: center
+
+            &:focus
+                outline: none
+
+        .list_room
+            width: 500px
+            height: 144px
+            overflow-y: scroll
+            overflow-x: hidden
+            direction: rtl
+
+            &::-webkit-scrollbar
+                width: 3px
+            &::-webkit-scrollbar-track
+                background: #ebf0f2
+            &::-webkit-scrollbar-thumb
+                background: #888
+            &::-webkit-scrollbar-thumb:hover
+                background: #555
+
+            .room
+                direction: ltr
+                display: block
+                padding: 7px 0px
+                border-top: 1px solid #ebf0f2
+                border-bottom: 1px solid #ebf0f2
+                height: 36px
+                overflow-wrap: anywhere
+
+                img
+                    margin: 0px 15px 0 12px
+
+            .room.active
+                background: #f5f5f5
+                border-top: 1px solid #c4c4c4
+                border-bottom: 1px solid #c4c4c4
+
+            .room:hover
+                background: #f9f9f9
+        
+        .live
+            height: 37px
+            z-index: 10
+
+            button
+                background: #ebf0f2
+                display: none
+            
+            button.show
+                display: block
+            
+            button.active
+                color: red
+
+        .live
+
+            span
+                font-size: 9px
+                color: red
+                width: 50px
+                text-align: center
+                display: block
+
+        .tools
+            width: 175px
+
+            input
+                display: none
+
+            input:checked + label
+                background: #f5f5f5
+                border-top: 1px solid #c4c4c4
+                border-bottom: 1px solid #c4c4c4
+
+            label
+                display: block
+                padding: 7px 0px
+                margin: 0
+                cursor: pointer
+                border-top: 1px solid #ebf0f2
+                border-bottom: 1px solid #ebf0f2
+
+                &:hover
+                    background: #f9f9f9
+                
+                i
+                    width: 50px
+                    text-align: center
+
+            > label
+
+                &:nth-of-type(1)
+                    order: 1
+                &:nth-of-type(2)
+                    order: 3
+                &:nth-of-type(3)
+                    order: 4
+                    
+            .select-group
+                height: 37px
+                overflow-x: visible
+                order: 2
+                z-index: 100
+                
+                input:not(:checked) + label
+                    display: none
+
+                label
+                    background: #ebf0f2
+
+            >input:checked ~ .select-group label:nth-of-type(1)
+                display: block
+    
+    main
+        flex: 1 1 100%
+        position: relative
+        

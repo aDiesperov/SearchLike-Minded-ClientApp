@@ -1,0 +1,13 @@
+<section class="overflow-hidden mt-1 position-relative">
+    <header class="overflow-hidden">
+        <img src="{{ Comment.avatar ? 'https://localhost:44339/' + Comment.avatar : ''}}" 
+            class="rounded-circle float-left mr-3" width="33" height="33" alt="">
+        <h4 class="mb-0"><a [routerLink]="['/profile', Comment.id]">{{Comment.fname}} {{Comment.mname}} {{Comment.lname}}</a></h4>
+        <button *ngIf="AccessDelelete" (click)="onDelete()" class="btn-sm btn btn-outline-danger position-absolute"><i class="fa fa-window-close" aria-hidden="true"></i></button>
+    </header>
+    <p>{{Comment.description}}</p>
+    <footer>
+        <span>{{Comment.commentDate}}<a href="#">Replay</a></span>
+        <div class="dropdown-divider"></div>
+    </footer>
+</section>

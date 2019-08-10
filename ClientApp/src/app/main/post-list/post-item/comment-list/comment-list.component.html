@@ -1,0 +1,12 @@
+<app-comment-item (deletedComment)="deletedComment($event)" *ngFor="let comment of comments" [Comment]="comment"></app-comment-item>
+<div class="input-group mt-1">
+    <div class="input-group-prepend">
+        <img src="https://localhost:44339/{{avatar}}" class="rounded-circle mr-3" width="33" height="33" alt="">
+    </div>
+    <input class="form-control" [(ngModel)]="textComment" (keyup.enter)="btnCom.click()" type="text"
+        placeholder="Comment...">
+    <div class="input-group-append">
+        <button (click)="onComment()" [disabled]="textComment.length < 2" #btnCom><i
+                class="far fa-paper-plane"></i></button>
+    </div>
+</div>

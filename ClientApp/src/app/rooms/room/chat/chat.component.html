@@ -1,0 +1,24 @@
+<div class="chat">
+    <div class="msg_history">
+        <div *ngFor="let message of messages">
+            <div *ngIf="!message.my" class="incoming_msg">
+                <div class="incoming_msg_img"><img src="https://localhost:44339/{{message.avatar}}" alt="sunil">
+                </div>
+                <div class="received_msg">
+                    <p>{{message.text}}</p>
+                    <span class="time_date"> 11:01 AM | June 9</span>
+                </div>
+            </div>
+            <div *ngIf="message.my" (click)='onDelete(message.messageId)' class="outgoing_msg">
+                <div class="sent_msg">
+                    <p>{{message.text}}</p>
+                    <span class="time_date"> {{message.sent | date: 'shortTime'}} | {{message.sent | date: 'MMMM d'}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="type_msg">
+        <input (keyup.enter)="sendMsg.click()" [(ngModel)]="message" name="message" type="text" class="write_msg" placeholder="Type a message" />
+        <button #sendMsg (click)="onSendMessage()" [disabled]="message.length === 0" class="msg_send_btn" type="button"><i class="far fa-paper-plane"></i></button>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+:host
+    flex: 1 1 100%
+    
+.chat
+    padding: 10px 15px
+    height: 100%
+
+    .msg_history
+        height: calc(100% - 59px)
+        overflow-y: auto
+        margin-bottom: 10px
+
+        &::-webkit-scrollbar
+            width: 3px
+        &::-webkit-scrollbar-track
+            background: #fff
+        &::-webkit-scrollbar-thumb
+            background: #888
+        &::-webkit-scrollbar-thumb:hover
+            background: #555
+
+        .time_date
+            color: #747474
+            display: block
+            font-size: 12px
+            margin: 8px 8px 0px 0px
+
+        .incoming_msg, .outgoing_msg
+            margin-bottom: 15px
+
+        .incoming_msg
+
+            .incoming_msg_img
+                display: inline-block
+                width: 24px
+
+                img
+                    max-width: 100%
+
+            .received_msg
+                display: inline-block
+                padding: 0 0 0 10px
+                vertical-align: top
+                width: calc(100% - 44px)
+
+                p
+                    background: #ebebeb none repeat scroll 0 0
+                    border-radius: 3px
+                    color: #646464
+                    font-size: 14px
+                    margin: 0
+                    padding: 5px 10px 5px 12px
+                    width: 100%
+
+        .outgoing_msg
+            overflow: hidden
+
+            .sent_msg
+                float: right
+                max-width: calc(100% - 44px)
+
+                P
+                    background: #05728f none repeat scroll 0 0
+                    border-radius: 3px
+                    font-size: 14px
+                    margin: 0
+                    color:#fff
+                    padding: 5px 10px 5px 12px
+                    width:100%
+                    display: inline-block
+
+    .type_msg
+        border-top: 1px solid #c4c4c4
+
+        input
+            border: none
+            color: #4c4c4c
+            font-size: 15px
+            height: 48px
+            width: calc(100% - 33px)
+            padding: 0px 5px
+
+            &:focus
+                outline: none
+
+        button
+            background: #05728f
+            border:  none
+            border-radius: 50%
+            color: #fff
+            cursor: pointer
+            font-size: 14px
+            height: 33px
+            width: 33px
+
+            &:disabled
+                background: #cccccc  

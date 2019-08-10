@@ -1,0 +1,20 @@
+<article class="card rounded-0 col-10 p-0 offset-1 mb-3">
+    <header class="position-relative">
+        <img src="{{ Post.avatar ? 'https://localhost:44339/' + Post.avatar : ''}}"
+            class="rounded-circle float-left mr-3" width="50" height="50" alt="">
+        <h2 class="mb-1"><a href="#">{{Post.fname}} {{Post.mname}} {{Post.lname}}</a></h2>
+        <span>{{Post.postDate}}</span>
+        <button *ngIf="AccessDelelete" (click)="onDelete()" class="btn btn-sm btn-outline-danger position-absolute"><i class="fa fa-window-close" aria-hidden="true"></i></button>
+    </header>
+    <p class="text-justify">
+        {{Post.description}}
+    </p>
+    <div class="dropdown-divider"></div>
+    <footer class="d-flex justify-content-between">
+        <a href="/" (click)="onLike()"><i [class.text-danger]="Post.myLike" class="far fa-heart mr-2"></i>{{Post.likes}}</a>
+        <a href="/" ><i class="far fa-share-square mr-2"></i>Share</a>
+        <a href="/" ><i class="far fa-comment mr-2"></i>{{Post.comments}}</a>
+    </footer>
+    <div class="dropdown-divider"></div>
+    <app-comment-list (changeComments)="changeComments($event)" [PostId]="Post.postId"></app-comment-list>
+</article>

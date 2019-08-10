@@ -1,0 +1,51 @@
+<form [formGroup]="account.registerFormModel" (submit)="onSubmit()" autocomplete="off">
+    <div class="form-row">
+        <div class="col-4 mb-3">
+            <label for="fname" class="required">First name</label>
+            <input type="text" class="form-control" id="fname" placeholder="First name" formControlName="Fname">
+        </div>
+        <div class="col-4 mb-3">
+            <label for="lname" class="required">Last name</label>
+            <input type="text" class="form-control" id="lname" placeholder="Last name" formControlName="Lname">
+        </div>
+        <div class="col-4 mb-3">
+            <label for="mname">Middle name</label>
+            <input type="text" class="form-control" id="mname" placeholder="Middle name" formControlName="Mname">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-5 mb-3">
+            <label for="birthday" class="required">Birthday</label>
+            <input type="date" class="form-control" id="birthday" formControlName="Birthday">
+        </div>
+        <div class="col-5 mb-3 offset-1">
+            <label>Sex</label>
+            <div class="btn-group btn-group-toggle d-block">
+                <label class="btn btn-secondary" [class.active]="account.registerFormModel.get('Sex').value == 1">
+                    <input formControlName="Sex" type="radio" name="Sex" id="sexMale" autocomplete="off" value="1"> Male
+                </label>
+                <label class="btn btn-secondary" [class.active]="account.registerFormModel.get('Sex').value == 2">
+                    <input formControlName="Sex" type="radio" name="Sex" id="sexFemale" autocomplete="off" value="2"> Female
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="email" class="required">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" formControlName="Email">
+    </div>
+    <div formGroupName="Passwords">
+        <div class="form-group">
+            <label for="password" class="required">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password" formControlName="Password">
+        </div>
+        <div class="form-group">
+            <label for="password_c" class="required">Comfirm password</label>
+            <input type="password" class="form-control" id="password_c" placeholder="Password comfirm"
+                formControlName="PasswordConfirm">
+        </div>
+    </div>
+    <div class="text-center">
+        <input type="submit" class="btn btn-primary" [disabled]="account.registerFormModel.invalid" value="Sing Up">
+    </div>
+</form>

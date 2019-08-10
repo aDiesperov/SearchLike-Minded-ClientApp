@@ -1,0 +1,75 @@
+<div class="my-profile py-3 mb-3">
+    <div class="img-profile text-center col-3">
+        <img class=" img-fluid rounded-circle"
+            src="{{ profileInfo?.avatar ? 'https://localhost:44339/' + profileInfo?.avatar : ''}}" alt="">
+        <button data-target="#changeAvatar" data-toggle="modal" *ngIf="UserId === profileId"
+            class="btn btn-outline-primary mt-3 container-fluid">
+            <i class="fas fa-edit mr-2"></i>Edit
+        </button>
+    </div>
+    <div class="info-profile pl-5 col-9">
+        <h1 class="mb-0">{{profileInfo?.fname}} {{profileInfo?.mname}} {{profileInfo?.lname}}</h1>
+        <a *ngIf="!(UserId !== profileId && !profileInfo?.status)"
+            href="#">{{profileInfo?.status ? profileInfo.status : 'set a status message'}}</a>
+        <div class="dropdown-divider"></div>
+        <table>
+            <tr>
+                <td>Birthday:</td>
+                <td>{{profileInfo?.birthday}}</td>
+            </tr>
+            <tr *ngIf="profileInfo?.currentCity">
+                <td>Current city:</td>
+                <td>{{profileInfo.currentCity}}</td>
+            </tr>
+            <tr *ngIf="profileInfo?.hometown">
+                <td>Hometown:</td>
+                <td>{{profileInfo.hometown}}</td>
+            </tr>
+            <tr *ngIf="profileInfo?.institution">
+                <td>Institution:</td>
+                <td>{{profileInfo.institution}}</td>
+            </tr>
+            <tr *ngIf="profileInfo?.phoneNumber">
+                <td>Mobile</td>
+                <td>{{profileInfo.phoneNumber}}</td>
+            </tr>
+            <tr>
+                <td>Registration date:</td>
+                <td>{{profileInfo?.registrationDate}}</td>
+            </tr>
+            <tr *ngIf="profileInfo?.webSite">
+                <td>Web site</td>
+                <td>{{profileInfo.webSite}}</td>
+            </tr>
+            <tr *ngIf="profileInfo?.aboutMe">
+                <td>About me</td>
+                <td>{{profileInfo.aboutMe}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="changeAvatar" tabindex="-1" role="dialog" aria-labelledby="changeAvatar" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Change avatar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img class="rounded-circle mb-3" width="200" id="imgAvatar"
+                    src="{{ profileInfo?.avatar ? 'https://localhost:44339/' + profileInfo?.avatar : ''}}" alt="">
+                <div class="custom-file">
+                    <input accept="image/png, image/jpeg" (change)="changeLabelAvatar($event)" type="file" class="custom-file-input" id="inputAvatar">
+                    <label class="custom-file-label" id="labelAvatar" for="inputAvatar">Choose file</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" (click)="uploadAvatar()" [disabled]="!selectedImg" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
