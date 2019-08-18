@@ -1,7 +1,7 @@
 <div class="my-profile py-3 mb-3">
     <div class="img-profile text-center col-3">
         <img class=" img-fluid rounded-circle"
-            src="{{ profileInfo?.avatar ? 'https://localhost:44339/' + profileInfo?.avatar : ''}}" alt="">
+            src="{{ profileInfo?.avatar ? Environment.remoteUrl + '/' + profileInfo.avatar : ''}}" alt="">
         <button data-target="#changeAvatar" data-toggle="modal" *ngIf="UserId === profileId"
             class="btn btn-outline-primary mt-3 container-fluid">
             <i class="fas fa-edit mr-2"></i>Edit
@@ -60,7 +60,7 @@
             </div>
             <div class="modal-body text-center">
                 <img class="rounded-circle mb-3" width="200" id="imgAvatar"
-                    src="{{ profileInfo?.avatar ? 'https://localhost:44339/' + profileInfo?.avatar : ''}}" alt="">
+                    src="{{ profileInfo?.avatar ? Environment.remoteUrl + '/' + profileInfo.avatar : ''}}" alt="">
                 <div class="custom-file">
                     <input accept="image/png, image/jpeg" (change)="changeLabelAvatar($event)" type="file" class="custom-file-input" id="inputAvatar">
                     <label class="custom-file-label" id="labelAvatar" for="inputAvatar">Choose file</label>

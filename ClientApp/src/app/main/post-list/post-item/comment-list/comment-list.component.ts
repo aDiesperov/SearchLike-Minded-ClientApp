@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommentService } from '../../../../shared/comment.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-comment-list',
@@ -8,6 +9,8 @@ import { CommentService } from '../../../../shared/comment.service';
 })
 export class CommentListComponent implements OnInit {
   constructor(private service: CommentService) {}
+
+  get Environment(){return environment; }
 
   @Output() changeComments = new EventEmitter<number>();
 

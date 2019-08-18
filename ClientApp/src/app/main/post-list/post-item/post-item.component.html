@@ -1,6 +1,6 @@
 <article class="card rounded-0 col-10 p-0 offset-1 mb-3">
     <header class="position-relative">
-        <img src="{{ Post.avatar ? 'https://localhost:44339/' + Post.avatar : ''}}"
+        <img src="{{ Post.avatar ? Environment.remoteUrl + '/' + Post.avatar : ''}}"
             class="rounded-circle float-left mr-3" width="50" height="50" alt="">
         <h2 class="mb-1"><a href="#">{{Post.fname}} {{Post.mname}} {{Post.lname}}</a></h2>
         <span>{{Post.postDate}}</span>

@@ -2,7 +2,7 @@
     <div class="msg_history">
         <div *ngFor="let message of messages">
             <div *ngIf="!message.my" class="incoming_msg">
-                <div class="incoming_msg_img"><img src="https://localhost:44339/{{message.avatar}}" alt="sunil">
+                <div class="incoming_msg_img"><img src="{{Environment.remoteUrl + '/' + message.avatar}}" alt="sunil">
                 </div>
                 <div class="received_msg">
                     <p>{{message.text}}</p>

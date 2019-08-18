@@ -5,14 +5,21 @@ export enum FigureType
 
 export class Figure{
     figureId: number;
-    radius: number;
-    color: string;
-    thickness: number;
-    text: string;
-    font: string;
+    strokeColor: string;
+    fillColor: string;
+    lineWidth: number;
+    
     x: number;
     y: number;
+    
     x_width: number;
     y_height: number;
+
+    radius: number;
+
+    text: string;
+    fontName: string;
+    fontSize: number;
+
     figureType: FigureType;
 }

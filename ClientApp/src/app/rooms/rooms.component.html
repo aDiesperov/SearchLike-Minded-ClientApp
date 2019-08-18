@@ -1,67 +1,39 @@
-<div class="wrapper_rooms">
-    <div class="left_bar overflow-hidden">
-        <button (click)="expandMenu()"><i class="fa fa-bars" aria-hidden="true"></i>
-            Menu
-        </button>
-        <nav class="list_room mb-4">
-            <a *ngFor="let room of rooms" [routerLink]="['/room', room.roomId]" routerLinkActive="active" class="room">
-                <img src="https://localhost:44339/{{room.avatar}}" class="rounded-circle" height="20" width="20" alt="">
-                {{room.title}}
-            </a>
-        </nav>
-        <div class="tools mb-3 d-flex flex-column">
-            <input checked type="radio" name="tool" value="cursor" id="cursorTool">
-            <label for="cursorTool">
-                <i class="fas fa-mouse-pointer"></i> Pointer
-            </label>
-            <input type="radio" name="tool" value="text" id="textTool">
-            <label for="textTool">
-                <i class="fas fa-font"></i> Text
-            </label>
-            <div class="select-group position-relative" (document:click)="onClickDocument()" (contextmenu)="expendGroupFigure($event)">
-                <input type="radio" name="tool" value="rectangle" id="rectangleTool">
-                <label for="rectangleTool">
-                    <i class="far fa-square"></i> Rectangle
-                </label>
-                <input type="radio" name="tool" value="arc" id="arcTool">
-                <label for="arcTool">
-                    <i class="far fa-circle"></i> Circle
-                </label>
-                <input type="radio" name="tool" value="line" id="lineTool">
-                <label for="lineTool">
-                    <i class="fas fa-grip-lines-vertical"></i> Line
-                </label>
-                <input type="radio" name="tool" value="lines" id="paintTool">
-                <label for="paintTool">
-                    <i class="fas fa-paint-brush"></i> Paint
-                </label>
-            </div>
-            <input type="color" id="colorTool">
-            <label for="colorTool">
-                <i class="fas fa-brush"></i> Color
-            </label>
-        </div>
-        <div (contextmenu)="expendGroupLive($event)" class="live mb-4 position-relative">
-            <button class="show" id="live_video">
-                <i class="fas fa-video"></i>
-                Video
+<div class="wrapper">
+    <div class="rooms_panel">
+        <div class="left_bar overflow-hidden">
+            <button (click)="expandMenu()"><i class="fa fa-bars" aria-hidden="true"></i>
+                Menu
             </button>
-            <button id="live_audio">
-                <i class="fas fa-microphone"></i>
-                Audio
-            </button>
-        </div>
-        <div class="live">
-            <span><i class="fas fa-circle"></i></span>
-            <nav class="list_room">
-                <a *ngFor="let live of room.lives" href="#" (click)="connectToLive(live.id)" class="room">
-                    <img src="https://localhost:44339/{{live.avatar}}" class="rounded-circle" height="20" width="20" alt="">
-                    {{live.fname}} {{live.lname}}
+            <nav class="list-left-bar list-rooms mb-4">
+                <a *ngFor="let room of roomService.rooms" [routerLink]="['/room', room.roomId]"
+                    routerLinkActive="active" class="item-list-left-bar">
+                    <img src="{{Environment.remoteUrl + '/' + room.avatar}}" class="rounded-circle" height="20"
+                        width="20" alt="">
+                    {{room.title}}
                 </a>
             </nav>
+            <div class="live" *ngIf="roomService.lives.length > 0">
+                <span><i class="fas fa-circle"></i></span>
+                <nav class="list-left-bar">
+                    <a *ngFor="let live of roomService.lives" (click)="connectToLive($event, live.id)"
+                        class="item-list-left-bar">
+                        <img src="{{ Environment.remoteUrl + '/' + live.avatar}}" class="rounded-circle" height="20"
+                            width="20" alt="">
+                        {{live.fname}} {{live.lname}}
+                    </a>
+                </nav>
+            </div>
+            <div class="links">
+                <a [routerLink]="['/room']">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Create new room
+                </a>
+                <a [routerLink]="['/']">
+                    <i class="fa fa-angle-left" aria-hidden="true"></i> Back to main
+                </a>
+            </div>
         </div>
+        <main>
+            <router-outlet></router-outlet>
+        </main>
     </div>
-    <main>
-        <router-outlet></router-outlet>
-    </main>
 </div>

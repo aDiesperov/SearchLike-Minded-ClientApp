@@ -4,6 +4,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,10 +26,10 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { SettingsComponent } from './main/settings/settings.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { RoomComponent } from './rooms/room/room.component';
-import { CanvasComponent } from './rooms/room/canvas/canvas.component';
 import { NgxUiLoaderModule } from  'ngx-ui-loader';
 import { NewRoomComponent } from './rooms/new-room/new-room.component';
 import { ChatComponent } from './rooms/room/chat/chat.component';
+import { DashboardComponent } from './rooms/room/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -49,9 +50,9 @@ import { ChatComponent } from './rooms/room/chat/chat.component';
     SettingsComponent,
     RoomsComponent,
     RoomComponent,
-    CanvasComponent,
     NewRoomComponent,
-    ChatComponent
+    ChatComponent,
+    DashboardComponent
   ],
   imports: [
     CommonModule,
@@ -62,7 +63,8 @@ import { ChatComponent } from './rooms/room/chat/chat.component';
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({progressBar: true}),
-    NgxUiLoaderModule
+    NgxUiLoaderModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

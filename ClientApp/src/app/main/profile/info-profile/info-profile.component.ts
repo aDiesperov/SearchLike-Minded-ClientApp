@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/shared/user.service';
 import { ProfileInfo } from 'src/app/models/profileInfo.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-info-profile',
@@ -15,6 +16,9 @@ import { ProfileInfo } from 'src/app/models/profileInfo.model';
   styleUrls: ['./info-profile.component.sass']
 })
 export class InfoProfileComponent implements OnInit, OnChanges {
+  
+  get Environment(){return environment}
+
   constructor(private service: UserService, private router: Router) {
     this.UserId = +JSON.parse(
       window.atob(localStorage.getItem('Token').split('.')[1])
@@ -45,18 +49,19 @@ export class InfoProfileComponent implements OnInit, OnChanges {
   }
 
   changeLabelAvatar(event){
-    let elImg:any = document.getElementById('imgAvatar');
+    let imgElement = document.getElementById('imgAvatar') as HTMLImageElement;
+    let imgLabel = document.getElementById('labelAvatar');
     
     if(event.target.files && event.target.files[0]){
       const reader = new FileReader();
-      reader.onload = (e: any) => elImg.src = e.target.result;
+      reader.onload = (e: any) => imgElement.src = e.target.result;
       reader.readAsDataURL(event.target.files[0]);
-      document.getElementById('labelAvatar').innerText = event.srcElement.value;
+      imgLabel.innerText = event.srcElement.value;
       this.selectedImg = true;
     }    
     else{
-      document.getElementById('labelAvatar').innerText = 'Choose file';
-      elImg.src = 'https://localhost:44339/' + this.profileInfo.avatar;
+      imgLabel.innerText = 'Choose file';
+      imgElement.src = environment.remoteUrl + '/' + this.profileInfo.avatar;
       this.selectedImg = false;
 
     }

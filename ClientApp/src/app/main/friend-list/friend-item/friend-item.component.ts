@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserCard } from 'src/app/models/userCard.model';
 import { FriendService } from 'src/app/shared/friend.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-friend-item',
@@ -9,6 +10,10 @@ import { FriendService } from 'src/app/shared/friend.service';
 })
 export class FriendItemComponent implements OnInit {
   constructor(private service: FriendService) {}
+
+  get Environment() {
+    return environment;
+  }
 
   @Input() user: UserCard;
 

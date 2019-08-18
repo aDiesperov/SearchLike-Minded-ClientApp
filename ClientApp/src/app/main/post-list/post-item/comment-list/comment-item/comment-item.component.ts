@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ElementRef, Output, EventEmitter } from '@angular/core';
-import { CommentService } from '../../../../../shared/comment.service';
+import { CommentService } from 'src/app/shared/comment.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-comment-item',
@@ -8,7 +9,9 @@ import { CommentService } from '../../../../../shared/comment.service';
 })
 export class CommentItemComponent implements OnInit {
 
-  constructor(private service: CommentService, private elementRef: ElementRef) { }
+  constructor(private service: CommentService) { }
+
+  get Environment(){return environment}
 
   @Output() deletedComment = new EventEmitter<number>();
   AccessDelelete = false;

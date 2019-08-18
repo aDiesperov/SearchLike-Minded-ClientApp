@@ -10,6 +10,6 @@ export class SearchService {
   constructor(private http: HttpClient) { }
 
   search(text: string) {
-    return this.http.get(environment.remoteUrl + '/search', {params : {q: text}});
+    return this.http.get(environment.remoteUrl_api + '/search', {params : {q: text}});
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { PostService } from '../../../shared/post.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-post-item',
@@ -9,6 +10,8 @@ import { PostService } from '../../../shared/post.service';
 export class PostItemComponent implements OnInit {
 
   constructor(private service: PostService, private elementRef: ElementRef) { }
+
+  get Environment(){ return environment}
 
   @Input() Post: {
     comments: number,

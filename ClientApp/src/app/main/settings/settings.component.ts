@@ -11,21 +11,16 @@ import { Router } from '@angular/router';
 export class SettingsComponent implements OnInit {
 
   constructor(private service: UserService, private router: Router) { 
-    service.getSettings().subscribe(
-      (res: Settings) => {
-        res.birthday = new Date(res.birthday).toISOString().split('T')[0];
-        service.settingsFormModel.setValue(res);
-      }
-    )
+    service.getSettings();
   }
 
   ngOnInit() {
   }
 
   onSubmit(){
-    this.service.setSettings().subscribe(
-      res => this.router.navigateByUrl('/')
-    )
+    if(this.service.setSettings()){
+      this.router.navigateByUrl('/')
+    }
   }
 
 }

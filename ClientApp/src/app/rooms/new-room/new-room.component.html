@@ -1,1 +1,31 @@
-<p>new-room works!</p>
+<div class="modal-header text-center">
+    <h2 class="modal-title w-100 font-weight-bold text-uppercase">Create new room</h2>
+</div>
+<div class="modal-body mx-3 col-md-5 m-auto text-center">
+    <div class="mb-2">
+            <label class="d-block" for="defaultForm-pass">Participants</label>
+            <ng-multiselect-dropdown [data]="dropdownData" [(ngModel)]="selectedItems" [settings]="dropdownSettings">
+            </ng-multiselect-dropdown>
+    </div>
+    <div *ngIf="selectedItems.length !== 0" class="md-form mb-2">
+        <input type="text" id="titleRoom" [(ngModel)]="title" class="form-control validate">
+        <label for="titleRoom" class="focus">Title</label>
+    </div>
+    <div *ngIf="title.length > 0 || selectedItems.length > 1">
+        <img class="mb-2" src="{{Environment.remoteUrl}}/default.jpg" height="100" id="imgAvatar" alt="">
+        <div class="md-form row">
+            <div class="col-4">
+                <div class="btn btn-outline-default waves-effect px-3 py-2 m-0" (click)="avatarRoom.click()">Choose file
+                </div>
+            </div>
+            <div class="col-8">
+                <input type="text" id="labelAvatar" class="form-control py-1" (click)="avatarRoom.click()" readonly>
+            </div>
+            <input (change)="changeAvatar($event)" #avatarRoom type="file" class="d-none">
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer d-flex justify-content-center">
+    <button class="btn btn-default" (click)="onSubmit()">Create</button>
+</div>

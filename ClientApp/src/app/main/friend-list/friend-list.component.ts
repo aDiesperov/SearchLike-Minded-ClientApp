@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./friend-list.component.sass']
 })
 export class FriendListComponent implements OnInit {
-  constructor(private service: FriendService, private route: ActivatedRoute) {}
+  constructor(private friendService: FriendService, private route: ActivatedRoute) {}
 
   users: UserCard[];
   newFollowers: UserCard[];
@@ -20,17 +20,20 @@ export class FriendListComponent implements OnInit {
       this.newFollowers = [];
       switch (params.type) {
         case 'online':
+            this.friendService.getOnline().subscribe((res: UserCard[]) => {
+              this.users = res.filter(u => !u.new);
+              this.newFollowers = res.filter(u => u.new);
+            });
           break;
         case 'followers':
-          this.service.getFollowers().subscribe((res: UserCard[]) => {
+          this.friendService.getFollowers().subscribe((res: UserCard[]) => {
             this.users = res.filter(u => !u.new);
             this.newFollowers = res.filter(u => u.new);
           });
           break;
         case 'all':
         default:
-          this.service
-            .getFriends()
+          this.friendService.getFriends()
             .subscribe((res: UserCard[]) => (this.users = res));
           break;
       }

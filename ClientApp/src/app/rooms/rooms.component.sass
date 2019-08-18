@@ -1,10 +1,12 @@
-::ng-deep body
+.wrapper
     background: #a1a1a1
+    min-height: 100vh
+    overflow: hidden
     
-.wrapper_rooms
+.rooms_panel
     width: 1140px
     background: white
-    margin: 0px auto 15px
+    margin: 0px auto 10px
     display: flex
     flex-flow: row
     flex-wrap: nowrap
@@ -14,6 +16,7 @@
         flex: 0 0 50px
         background: #ebf0f2
         transition: flex-basis .25s
+        position: relative
 
         button
             width: 175px
@@ -29,12 +32,14 @@
             &:focus
                 outline: none
 
-        .list_room
-            width: 500px
-            height: 144px
+        .list-rooms.list-left-bar
+            height: 216px
+
+        .list-left-bar
             overflow-y: scroll
             overflow-x: hidden
             direction: rtl
+            width: 500px
 
             &::-webkit-scrollbar
                 width: 3px
@@ -45,29 +50,28 @@
             &::-webkit-scrollbar-thumb:hover
                 background: #555
 
-            .room
+            .item-list-left-bar
                 direction: ltr
                 display: block
                 padding: 7px 0px
                 border-top: 1px solid #ebf0f2
                 border-bottom: 1px solid #ebf0f2
                 height: 36px
-                overflow-wrap: anywhere
-
+                
                 img
                     margin: 0px 15px 0 12px
 
-            .room.active
+            .item-list-left-bar.active
                 background: #f5f5f5
                 border-top: 1px solid #c4c4c4
                 border-bottom: 1px solid #c4c4c4
 
-            .room:hover
+            .item-list-left-bar:hover
                 background: #f9f9f9
         
         .live
-            height: 37px
-            z-index: 10
+            .list-left-bar
+                height: 216px
 
             button
                 background: #ebf0f2
@@ -79,65 +83,38 @@
             button.active
                 color: red
 
-        .live
-
             span
                 font-size: 9px
                 color: red
                 width: 50px
                 text-align: center
                 display: block
-
-        .tools
-            width: 175px
-
-            input
-                display: none
-
-            input:checked + label
-                background: #f5f5f5
-                border-top: 1px solid #c4c4c4
-                border-bottom: 1px solid #c4c4c4
-
-            label
-                display: block
-                padding: 7px 0px
-                margin: 0
-                cursor: pointer
+                
+        .links 
+            position: absolute
+            bottom: 0px
+            
+            a
                 border-top: 1px solid #ebf0f2
                 border-bottom: 1px solid #ebf0f2
+                padding: 7px 0px
+                width: 175px
+                display: block
+
+                i
+                    border-radius: 50%
+                    width: 24px
+                    padding: 5px 0px
+                    margin: 0px 13px
+                    text-align: center
+                    background-color: #2bbbad
+                    color: #fff
+                    -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12)
+                    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12)
 
                 &:hover
                     background: #f9f9f9
-                
-                i
-                    width: 50px
-                    text-align: center
 
-            > label
-
-                &:nth-of-type(1)
-                    order: 1
-                &:nth-of-type(2)
-                    order: 3
-                &:nth-of-type(3)
-                    order: 4
-                    
-            .select-group
-                height: 37px
-                overflow-x: visible
-                order: 2
-                z-index: 100
-                
-                input:not(:checked) + label
-                    display: none
-
-                label
-                    background: #ebf0f2
-
-            >input:checked ~ .select-group label:nth-of-type(1)
-                display: block
-    
     main
         flex: 1 1 100%
         position: relative

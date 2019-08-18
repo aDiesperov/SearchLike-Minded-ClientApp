@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RoomService } from '../shared/room.service';
 import { Room } from '../models/room.model';
 import { WebRTCService } from '../shared/web-rtc.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-rooms',
@@ -9,18 +10,15 @@ import { WebRTCService } from '../shared/web-rtc.service';
   styleUrls: ['./rooms.component.sass']
 })
 export class RoomsComponent implements OnInit {
-  constructor(private room: RoomService, private webrtc: WebRTCService) {}
+  constructor(private roomService: RoomService, private webrtc: WebRTCService) {}
+
+  get Environment(){return environment}
 
   ngOnInit() {
-    this.room.getRooms().subscribe(
-      (res: Room[]) => this.rooms = res
-    )
+    this.roomService.getRooms().subscribe();
   }
 
-  rooms: Room[];
   expended = false;
-  expendedGroupMenu = false;
-  expendedGroupLive = false;
 
   expandMenu() {
     let left_bar = document.getElementsByClassName('left_bar')[0] as HTMLElement;
@@ -33,71 +31,8 @@ export class RoomsComponent implements OnInit {
     this.expended = !this.expended;
   }
 
-  expendGroupFigure(event){
-    if(this.expendedGroupMenu){
-      let el = document.getElementById('arcTool').nextElementSibling as HTMLElement;
-      el.style.display = '';
-      el = document.getElementById('lineTool').nextElementSibling as HTMLElement;
-      el.style.display = '';
-      el = document.getElementById('rectangleTool').nextElementSibling as HTMLElement;
-      el.style.display = '';
-      el = document.getElementById('paintTool').nextElementSibling as HTMLElement;
-      el.style.display = '';
-    }
-    else{
-      let el = document.getElementById('arcTool').nextElementSibling as HTMLElement;
-      el.style.display = 'block';
-      el = document.getElementById('lineTool').nextElementSibling as HTMLElement;
-      el.style.display = 'block';
-      el = document.getElementById('rectangleTool').nextElementSibling as HTMLElement;
-      el.style.display = 'block';
-      el = document.getElementById('paintTool').nextElementSibling as HTMLElement;
-      el.style.display = 'block';
-    }
-    this.expendedGroupMenu = !this.expendedGroupMenu;
-    return false;
-  }
-
-  expendGroupLive(event){
-    if(this.expendedGroupLive){
-      let el = document.getElementById('live_video') as HTMLElement;
-      el.style.display = '';
-      el = document.getElementById('live_audio') as HTMLElement;
-      el.style.display = '';
-    }
-    else{
-      let el = document.getElementById('live_video') as HTMLElement;
-      el.style.display = 'block';
-      el = document.getElementById('live_audio') as HTMLElement;
-      el.style.display = 'block';
-    }
-    this.expendedGroupLive = !this.expendedGroupLive;
-    return false;
-  }
-
-  onClickDocument() {
-    if(this.expendedGroupMenu){
-      let el = document.getElementById('arcTool').nextElementSibling as HTMLElement;
-      el.style.display = '';
-      el = document.getElementById('lineTool').nextElementSibling as HTMLElement;
-      el.style.display = '';
-      el = document.getElementById('rectangleTool').nextElementSibling as HTMLElement;
-      el.style.display = '';
-      el = document.getElementById('paintTool').nextElementSibling as HTMLElement;
-      el.style.display = '';
-      this.expendedGroupMenu = false;
-    }
-    if(this.expendedGroupLive){
-      let el = document.getElementById('live_video') as HTMLElement;
-      el.style.display = '';
-      el = document.getElementById('live_audio') as HTMLElement;
-      el.style.display = '';
-      this.expendedGroupLive = false;
-    }
-  }
-
-  connectToLive(userId: number){
+  connectToLive(e, userId: number){
+    e.preventDefault();
     this.webrtc.createOffer(userId);
-    return false;
   }
 }

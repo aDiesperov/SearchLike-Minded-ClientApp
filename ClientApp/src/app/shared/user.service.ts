@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 import { Settings } from '../models/settings.model';
 
 @Injectable({
@@ -82,30 +83,40 @@ export class UserService {
       Email: this.registerFormModel.value.Email,
       Password: this.registerFormModel.value.Passwords.Password
     };
-    return this.http.post(environment.remoteUrl + '/user/register', body);
+    return this.http.post(environment.remoteUrl_api + '/user/register', body);
   }
 
   login(formData) {
-    return this.http.post(environment.remoteUrl + '/user/login', formData);
+    return this.http.post(environment.remoteUrl_api + '/user/login', formData);
   }
 
   getProfile(id: number) {
-    return this.http.get(environment.remoteUrl + '/user/' + id);
+    return this.http.get(environment.remoteUrl_api + '/user/' + id);
   }
 
   getMyInfo() {
-    return this.http.get(environment.remoteUrl + '/user/getMyInfo');
+    return this.http.get(environment.remoteUrl_api + '/user/getMyInfo');
   }
 
   updateAvatar(fd) {
-    return this.http.put(environment.remoteUrl + '/user/updateAvatar', fd);
+    return this.http.put(environment.remoteUrl_api + '/user/updateAvatar', fd);
   }
 
   getSettings() {
-    return this.http.get(environment.remoteUrl + '/user/getSettings');
+    return this.http.get(environment.remoteUrl_api + '/user/getSettings').subscribe(
+      (res: Settings) => {
+        res.birthday = new Date(res.birthday).toISOString().split('T')[0];
+        this.settingsFormModel.setValue(res);
+      }
+    );
   }
 
-  setSettings() {
-    return this.http.put(environment.remoteUrl + '/user/setSettings', this.settingsFormModel.value);
+  setSettings(): boolean {
+    if(this.settingsFormModel.valid){
+      this.http.put(environment.remoteUrl_api + '/user/setSettings', this.settingsFormModel.value)
+        .subscribe();
+      return true;
+    }
+    return false;
   }
 }

@@ -10,8 +10,8 @@ export class WebRTCService {
 
   server = {
     iceServers: [
-      {urls: "stun:23.21.150.121"},
-      {urls: "stun:stun.l.google.com:19302"}
+      {urls: "stun:stun.l.google.com:19302"},
+      {urls: "turn:numb.viagenie.ca", username: 'Tosssyan@mail.ru', credential: 'abcdef1234'}
     ]
   }
 
@@ -22,6 +22,7 @@ export class WebRTCService {
         audio: true,
         video: video
     };
+
     return navigator.mediaDevices.getUserMedia(constr);
   }
 
@@ -30,7 +31,7 @@ export class WebRTCService {
       candidateCache: []
     };
 
-    let pc = new RTCPeerConnection();
+    let pc = new RTCPeerConnection(this.server);
 
     pc.ontrack = function(event) {
       if(event.track.kind === "video"){

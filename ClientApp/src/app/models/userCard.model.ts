@@ -4,9 +4,8 @@ export class UserCard{
     mname: string;
     lname: string;
     avatar: string;
-
     hometown: string;
-
     typeFriend: number;
     new: boolean;
+    online: boolean;
 }

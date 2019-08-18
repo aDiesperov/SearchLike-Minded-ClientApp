@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { SignalrService } from 'src/app/shared/signalr.service';
 import { Message } from 'src/app/models/message.model';
 import { ChatService } from 'src/app/shared/chat.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-chat',
@@ -9,51 +10,58 @@ import { ChatService } from 'src/app/shared/chat.service';
   styleUrls: ['./chat.component.sass']
 })
 export class ChatComponent implements OnInit {
+  get Environment() {
+    return environment;
+  }
 
-  constructor(signalr: SignalrService, private chat: ChatService) { 
-    signalr.connection.on('receiveMessage', (message: Message, room: number) => {
-      if(room === this.roomId){
-        this.messages.push(message);
-        setTimeout(this.scrolDown, 50);
+  constructor(
+    signalrService: SignalrService,
+    private chatService: ChatService
+  ) {
+    signalrService.connection.on(
+      'receiveMessage',
+      (message: Message, room: number) => {
+        if (room === this.roomId) {
+          this.chatService.messages.push(message);
+          setTimeout(this.scrolDown, 50);
+        }
       }
-    });
-    signalr.connection.on('deleteMessage', (messageId: number) => {
-        this.messages = this.messages.filter(m => m.messageId !== messageId);
+    );
+    signalrService.connection.on('deleteMessage', (messageId: number) => {
+      this.chatService.messages = this.chatService.messages.filter(
+        m => m.messageId !== messageId
+      );
     });
   }
 
   @Input() roomId: number;
-  @Input() messages: Array<Message>;
   message = '';
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSendMessage() {
     if (this.message.length > 0) {
-      this.chat.sendMessage(this.roomId, this.message).subscribe((res: Message) => {
-          this.messages.push(res);
+      this.chatService
+        .sendMessage(this.roomId, this.message)
+        .subscribe((res: Message) => {
           this.message = '';
           setTimeout(this.scrolDown, 50);
-      });
+        });
     }
   }
 
   scrolDown() {
     let msg_history = document.querySelector('.msg_history') as HTMLElement;
-    msg_history.scrollTo({top: msg_history.scrollHeight, behavior: 'smooth'});
+    msg_history.scrollTo({ top: msg_history.scrollHeight, behavior: 'smooth' });
   }
 
   onDelete(id: number) {
     if (confirm('Are you sure?')) {
-      this.chat.deleteMessage(id).subscribe(
-          res => this.messages = this.messages.filter(m => m.messageId != id)
-      );
+      this.chatService.deleteMessage(id).subscribe();
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     setTimeout(this.scrolDown, 50);
   }
-
 }

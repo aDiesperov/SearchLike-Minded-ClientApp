@@ -1,0 +1,46 @@
+<canvas width="748" height="600" (mouseleave)="onMouseLeave()" (mousemove)="onMouseMove($event)"
+    (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp()">
+    canvas dont't support
+</canvas>
+<div class="top-panel">
+    <div class="tools">
+        <input checked type="radio" name="tool" value="cursor" id="cursorTool">
+        <label for="cursorTool">
+            <i class="fas fa-mouse-pointer"></i> Pointer
+        </label>
+        <input type="radio" name="tool" value="text" id="textTool">
+        <label for="textTool">
+            <i class="fas fa-font"></i> Text
+        </label>
+        <input type="radio" name="tool" value="rectangle" id="rectangleTool">
+        <label for="rectangleTool">
+            <i class="far fa-square"></i> Rectangle
+        </label>
+        <input type="radio" name="tool" value="arc" id="arcTool">
+        <label for="arcTool">
+            <i class="far fa-circle"></i> Circle
+        </label>
+        <input type="radio" name="tool" value="line" id="lineTool">
+        <label for="lineTool">
+            <i class="fas fa-grip-lines-vertical"></i> Line
+        </label>
+        <input type="radio" name="tool" value="lines" id="paintTool">
+        <label for="paintTool">
+            <i class="fas fa-paint-brush"></i> Paint
+        </label>
+        <input type="color" id="colorTool">
+        <label for="colorTool">
+            <i class="fas fa-tools"></i> Settings
+        </label>
+    </div>
+    <div class="live">
+        <button id="live_video">
+            <i class="fas fa-video"></i>
+            
+        </button>
+        <button id="live_audio">
+            <i class="fas fa-microphone"></i>
+            
+        </button>
+    </div>
+</div>

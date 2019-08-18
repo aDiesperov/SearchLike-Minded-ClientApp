@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
-import * as signalR from '@aspnet/signalr';
+import { HubConnection, HubConnectionBuilder, LogLevel, HubConnectionState } from '@aspnet/signalr';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignalrService {
   
-  connection: signalR.HubConnection;
+  connection: HubConnection;
 
   constructor() {
     let Token = localStorage.getItem('Token');
-    this.connection = new signalR.HubConnectionBuilder()
-      .configureLogging(signalR.LogLevel.Information)
-      .withUrl("https://localhost:44339/hubSR", { accessTokenFactory: () => Token })
+    this.connection = new HubConnectionBuilder()
+      .configureLogging(LogLevel.Information)
+      .withUrl(environment.remoteUrl_signalR, { accessTokenFactory: () => Token })
       .build();
 
     // this.connection.on('setConnectionId', (connectionId: number) => {
@@ -28,12 +30,12 @@ export class SignalrService {
 
    invoke(method: string, ...args: any): Promise<any>{
       return new Promise((resolve, reject) => {
-        if(this.connection.state == signalR.HubConnectionState.Connected){
+        if(this.connection.state == HubConnectionState.Connected){
           this.connection.invoke(method, ...args).then(res => resolve(res)).catch(err => reject(err));
         }
         else{
           let tmp = setInterval(() => {
-            if(this.connection.state == signalR.HubConnectionState.Connected){
+            if(this.connection.state == HubConnectionState.Connected){
               clearInterval(tmp);
               this.connection.invoke(method, ...args).then(res => resolve(res)).catch(err => reject(err));
             }

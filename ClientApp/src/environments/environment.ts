@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  remoteUrl: 'https://localhost:44339/api'
+  remoteUrl: 'http://192.168.43.123:5000',
+  remoteUrl_api: 'http://192.168.43.123:5000/api',
+  remoteUrl_signalR: 'http://192.168.43.123:5000/hubSR'
 };
 
 /*

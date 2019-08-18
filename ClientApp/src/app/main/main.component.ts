@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../shared/user.service';
 import { MyInfo } from '../models/myInfo.model';
-import { Subscription } from 'rxjs';
+import { SignalrService } from '../shared/signalr.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-main',
@@ -10,12 +11,15 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./main.component.sass']
 })
 export class MainComponent implements OnInit {
-  constructor(private router: Router, service: UserService) {
+
+  get Environment(){return environment}
+  
+  constructor(private router: Router, userService: UserService, private signalrService: SignalrService) {
     this.UserId = +JSON.parse(
       window.atob(localStorage.getItem('Token').split('.')[1])
     ).UserId;
 
-    service.getMyInfo().subscribe(
+    userService.getMyInfo().subscribe(
       (res: MyInfo) => {
         this.myInfo = res;
         localStorage.setItem('avatar', res.avatar);
