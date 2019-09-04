@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { Settings } from '../models/settings.model';
+import { tap } from 'rxjs/operators';
+import { MyInfo } from '../models/myInfo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +32,7 @@ export class UserService {
           '',
           [
             Validators.required,
-            Validators.pattern('.*[a-z]+'),
+            Validators.pattern('.*[a-z]+.*'),
             Validators.minLength(5),
             Validators.maxLength(20)
           ]
@@ -38,9 +40,7 @@ export class UserService {
         PasswordConfirm: [
           '',
           [
-            Validators.required,
-            Validators.minLength(5),
-            Validators.maxLength(20)
+            Validators.required
           ]
         ]
       },
@@ -64,8 +64,9 @@ export class UserService {
 
   comparePasswords(fb: FormGroup) {
     const confirmPass = fb.get('PasswordConfirm');
-    if (confirmPass.errors == null || 'passMismatch' in confirmPass.errors) {
-      if (fb.get('Password').value !== confirmPass.value) {
+    const pass = fb.get('Password');
+    if (pass.errors == null || 'passMismatch' in confirmPass.errors) {
+      if (pass.value !== confirmPass.value) {
         confirmPass.setErrors({ passMismatch: true });
       } else {
         confirmPass.setErrors(null);
@@ -94,8 +95,14 @@ export class UserService {
     return this.http.get(environment.remoteUrl_api + '/user/' + id);
   }
 
+  myInfo: MyInfo;
+
   getMyInfo() {
-    return this.http.get(environment.remoteUrl_api + '/user/getMyInfo');
+    return this.http.get(environment.remoteUrl_api + '/user/getMyInfo').pipe(
+      tap((res: MyInfo) => {
+        this.myInfo = res;
+      })
+    );
   }
 
   updateAvatar(fd) {

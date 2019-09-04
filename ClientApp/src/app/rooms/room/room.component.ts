@@ -27,10 +27,10 @@ export class RoomComponent implements OnInit {
     private dashboardService: DashboardService,
     private webRTCService: WebRTCService
   ) {
-    this.signalrService.connection.on('startLive', (user: UserInfo) =>
+    this.signalrService.Connection.on('startLive', (user: UserInfo) =>
       this.roomService.lives.push(user)
     );
-    this.signalrService.connection.on(
+    this.signalrService.Connection.on(
       'stopLive',
       (userId: number) =>
         (this.roomService.lives = this.roomService.lives.filter(
@@ -38,21 +38,21 @@ export class RoomComponent implements OnInit {
         ))
     );
 
-    this.signalrService.connection.on(
+    this.signalrService.Connection.on(
       'offer',
       (userId: number, desc: string) => {
         if (this.localStream !== null)
           webRTCService.createAnswer(userId, desc, this.localStream);
       }
     );
-    this.signalrService.connection.on(
+    this.signalrService.Connection.on(
       'answer',
       (userId: number, desc: string) => {
         webRTCService.acceptAnswer(userId, desc);
       }
     );
 
-    this.signalrService.connection.on(
+    this.signalrService.Connection.on(
       'candidate',
       (userId: number, data: string) => {
         webRTCService.receiveCandidate(userId, data);
@@ -70,7 +70,7 @@ export class RoomComponent implements OnInit {
       this.signalrService.invoke('leaveGroup');
       if (this.localStream) {
         this.closeLocalStream();
-        this.signalrService.connection.invoke('stopLive');
+        this.signalrService.Connection.invoke('stopLive');
         document.querySelector('.live .active').classList.remove('active');
       }
       this.chatService.messages = new Array<Message>();
@@ -94,6 +94,13 @@ export class RoomComponent implements OnInit {
         } else this.router.navigateByUrl('/room');
       });
     });
+
+    document
+      .getElementById('live_video')
+      .addEventListener('click', this.onLive.bind(this));
+    document
+      .getElementById('live_audio')
+      .addEventListener('click', this.onLive.bind(this));
   }
 
   localStream: MediaStream;
@@ -109,7 +116,7 @@ export class RoomComponent implements OnInit {
     let target = event.currentTarget as HTMLElement;
     if (target.classList.contains('active')) {
       if (this.localStream !== null) {
-        this.signalrService.connection.invoke('stopLive');
+        this.signalrService.Connection.invoke('stopLive');
         this.closeLocalStream();
       }
       target.classList.remove('active');
@@ -124,12 +131,22 @@ export class RoomComponent implements OnInit {
         target.previousElementSibling.classList.remove('show');
       }
       this.webRTCService.getStream(isVideo).then(mediaStream => {
+
+        let el = document.createElement('video');
+        el.muted = true;
+        //el. = true;
+        el.style.position = 'absolute'; el.style.bottom = '0px'; el.style.right = '0px';
+        el.style.width = '150px';
+        document.querySelector(".canvas-wrapper").appendChild(el);
+        el.srcObject = mediaStream;
+        el.play();
+
         if (this.localStream) {
           this.closeLocalStream();
           target.classList.add('active');
           this.localStream = mediaStream;
         } else {
-          this.signalrService.connection
+          this.signalrService.Connection
             .invoke('startLive', this.roomId)
             .then(res => {
               if (res) {

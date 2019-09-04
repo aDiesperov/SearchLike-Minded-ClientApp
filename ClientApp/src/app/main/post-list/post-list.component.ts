@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { PostService } from '../../shared/post.service';
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-post-list',
@@ -13,7 +14,7 @@ export class PostListComponent implements OnInit, OnChanges {
   postText = '';
   @Input() Id: number;
   @Input() Pub: boolean;
-  posts = [];
+  posts: Post[];
   accessPublish = false;
 
   ngOnInit() {
@@ -31,7 +32,7 @@ export class PostListComponent implements OnInit, OnChanges {
 
   onPost() {
     this.service.addPost(this.postText).subscribe(
-      res => {
+      (res: Post) => {
         this.postText = '';
         this.posts.unshift(Object.assign(res, {likes: 0, comments: 0}));
       }

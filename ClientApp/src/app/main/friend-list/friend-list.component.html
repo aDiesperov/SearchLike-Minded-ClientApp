@@ -9,12 +9,14 @@
 <div>
     <a [routerLink]="['/friends', 'all']" routerLinkActive="active">All friends</a> |
     <a [routerLink]="['/friends', 'online']" routerLinkActive="active">Friends online</a> |
-    <a [routerLink]="['/friends', 'followers']" routerLinkActive="active">Followers</a>
+    <a [routerLink]="['/friends', 'followers']" routerLinkActive="active">
+      Followers <span *ngIf="userService.myInfo?.newFollowers > 0" class="text-danger">({{userService.myInfo?.newFollowers}})</span>
+    </a>
 </div>
-<div *ngIf="newFollowers?.length > 0" class="mt-3">
+<div *ngIf="(users | newFollowers: true).length > 0" class="mt-3">
     <h2>New followers</h2>
-    <app-friend-item *ngFor="let newFollower of newFollowers" [user]="newFollower" ></app-friend-item>
+    <app-friend-item *ngFor="let user of users | newFollowers: true" [user]="user" ></app-friend-item>
 </div>
 <div class="my-3">
-    <app-friend-item *ngFor="let user of users" [user]="user" ></app-friend-item>
+    <app-friend-item *ngFor="let user of users | newFollowers: false" [user]="user" ></app-friend-item>
 </div>

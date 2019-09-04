@@ -12,7 +12,7 @@
                     {{room.title}}
                 </a>
             </nav>
-            <div class="live" *ngIf="roomService.lives.length > 0">
+            <div class="live_users" *ngIf="roomService.lives.length > 0">
                 <span><i class="fas fa-circle"></i></span>
                 <nav class="list-left-bar">
                     <a *ngFor="let live of roomService.lives" (click)="connectToLive($event, live.id)"

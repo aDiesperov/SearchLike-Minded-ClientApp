@@ -20,7 +20,7 @@ export class WebRTCService {
   getStream(video: boolean): Promise<MediaStream> {
     let constr = {
         audio: true,
-        video: video
+        video: video ? { width: 640, height: 480 } : false
     };
 
     return navigator.mediaDevices.getUserMedia(constr);
@@ -38,7 +38,15 @@ export class WebRTCService {
         let el = document.createElement('video');
         el.style.position = 'absolute'; el.style.top = '0px'; el.style.left = '0px';
         el.style.width = '200px'; el.style.height = '150px';
-        document.querySelector("main").appendChild(el);
+        document.querySelector(".canvas-wrapper").appendChild(el);
+        el.srcObject = event.streams[0];
+        el.play();
+      }
+      else if(event.track.kind === "audio"){
+        let el = document.createElement('audio');
+        el.style.position = 'absolute'; el.style.top = '0px'; el.style.left = '0px';
+        el.style.width = '200px'; el.style.height = '40px';
+        document.querySelector(".canvas-wrapper").appendChild(el);
         el.srcObject = event.streams[0];
         el.play();
       }
@@ -46,7 +54,7 @@ export class WebRTCService {
 
     this.initConnection(pc, userId, 'createOffer');
     this.peers[userId].connection = pc;
-    pc.createOffer({ offerToReceiveAudio: true, offerToReceiveVideo: true })
+    pc.createOffer({offerToReceiveAudio: true, offerToReceiveVideo: true})
     .then(offer => pc.setLocalDescription(offer))
   }
 
@@ -78,7 +86,7 @@ export class WebRTCService {
     pc.onicecandidate = event => {
       if (event.candidate) {
         this.peers[userId].candidateCache.push(event.candidate);
-      } 
+      }
       else {
         this.signalr.invoke(sdpType, userId, JSON.stringify(pc.localDescription));
         for (var i = 0; i < this.peers[userId].candidateCache.length; i++) {

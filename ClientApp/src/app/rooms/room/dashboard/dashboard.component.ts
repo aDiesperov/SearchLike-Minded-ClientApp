@@ -13,8 +13,12 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService,
     signalrService: SignalrService
   ) {
-    signalrService.connection.on('receiveFigure', (figure: Figure) => {
+    signalrService.Connection.on('receiveFigure', (figure: Figure) => {
       dashboardService.receiveFigure(figure);
+      this.drawAllFigures();
+    });
+    signalrService.Connection.on('deletedFigure', (figureId: number) => {
+      dashboardService.deletedFigure(figureId);
       this.drawAllFigures();
     });
   }
@@ -28,9 +32,11 @@ export class DashboardComponent implements OnInit {
 
   //new figure
   painted = true;
-  selectedFigure: Figure;
+  textEl = false;
+  newFigure: Figure;
 
   //variable for cursor tool
+  selectedFigure: Figure;
   cursorStX: number;
   cursorStY: number;
   cursorDx: number;
@@ -40,7 +46,9 @@ export class DashboardComponent implements OnInit {
 
   //settings figure
   strokeColor = '#000000';
+  enabledStrokeColor = true;
   fillColor = '#000000';
+  enabledFillColor = true;
   fontSize = 14;
   fontName = 'Arial';
   lineWidth = 2;
@@ -49,148 +57,123 @@ export class DashboardComponent implements OnInit {
     this.ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
   }
 
-  initialNewFigure(x: number, y: number, figureType: string) {
+  initialNewFigure(x: number, y: number, figureType: string): Figure {
     let figure = new Figure();
     figure.figureType = FigureType[figureType];
     figure.x = x;
     figure.y = y;
-    figure.strokeColor = this.strokeColor;
-    this.selectedFigure = figure;
+    figure.strokeColor = this.enabledStrokeColor
+      ? this.strokeColor
+      : 'transparent';
+    return figure;
   }
   createTextElement() {
     let p_canvas = document.getElementsByTagName('canvas')[0].parentElement;
     var textElement = document.createElement('textarea');
     textElement.style.position = 'absolute';
-    textElement.style.left = this.selectedFigure.x + 'px';
-    textElement.style.top = this.selectedFigure.y + 'px';
-    p_canvas.appendChild(textElement);
+    textElement.style.left = this.newFigure.x + 'px';
+    textElement.style.top = this.newFigure.y + 'px';
     textElement.onblur = () => {
       textElement.remove();
+      this.textEl = false;
       if (textElement.value.length > 0) {
-        this.selectedFigure.text = textElement.value;
-        this.selectedFigure.y += 18;
-        this.selectedFigure.x += 3;
-        this.sendFigure(this.selectedFigure);
-        this.drawAllFigures();
+        this.newFigure.text = textElement.value;
+        this.newFigure.y += 18;
+        this.newFigure.x += 3;
+        this.sendFigure(this.newFigure);
       }
-      this.selectedFigure = null;
+      this.newFigure = null;
     };
-    textElement.onload = () => {
-      textElement.focus();
-    };
+    p_canvas.appendChild(textElement);
+    this.textEl = true;
+    setTimeout(() => textElement.focus(), 100);
   }
 
   onMouseDown(event) {
+    if(event.button !== 0) return;
     this.tool = (document.querySelector(
       'input[name="tool"]:checked'
     ) as HTMLInputElement).value;
+
     if (this.tool === 'arc' || this.tool === 'rectangle') {
-      this.initialNewFigure(event.offsetX, event.offsetY, this.tool);
-      this.selectedFigure.fillColor = this.fillColor;
-      this.selectedFigure.lineWidth = this.lineWidth;
+      let figure = this.initialNewFigure(
+        event.offsetX,
+        event.offsetY,
+        this.tool
+      );
+      figure.fillColor = this.enabledFillColor ? this.fillColor : 'transparent';
+      figure.lineWidth = this.lineWidth;
+      this.newFigure = figure;
       this.painted = false;
     } else if (this.tool === 'line' || this.tool === 'lines') {
-      this.initialNewFigure(event.offsetX, event.offsetY, this.tool);
-      this.selectedFigure.lineWidth = this.lineWidth;
+      let figure = this.initialNewFigure(
+        event.offsetX,
+        event.offsetY,
+        this.tool
+      );
+      figure.lineWidth = this.lineWidth;
+      this.newFigure = figure;
       this.painted = false;
     } else if (this.tool === 'text') {
-      this.initialNewFigure(event.offsetX, event.offsetY, this.tool);
-      this.selectedFigure.fontName = this.fontName;
-      this.selectedFigure.fontSize = this.fontSize;
-      this.createTextElement();
+      if (!this.textEl) {
+        let figure = this.initialNewFigure(
+          event.offsetX,
+          event.offsetY,
+          this.tool
+        );
+        figure.fontName = this.fontName;
+        figure.fontSize = this.fontSize;
+        figure.fillColor = this.enabledFillColor ? this.fillColor : 'transparent';
+        this.newFigure = figure;
+        this.createTextElement();
+      }
     } else if (this.tool === 'cursor') {
-      let x = event.offsetX;
-      let y = event.offsetY;
-      this.dashboardService.figures
-        .slice()
-        .reverse()
-        .some(figure => {
-          switch (figure.figureType) {
-            case FigureType.rectangle:
-              if (
-                figure.x < x &&
-                figure.x + figure.x_width > x &&
-                figure.y < y &&
-                figure.y + figure.y_height > y
-              ) {
-                this.selectFigure(figure, event);
-                return true;
-              }
-              break;
-            case FigureType.arc:
-              let r = Math.sqrt(
-                Math.pow(x - figure.x, 2) + Math.pow(y - figure.y, 2)
-              );
-              if (figure.radius > r) {
-                this.selectFigure(figure, event);
-                return true;
-              }
-              break;
-            case FigureType.line:
-              if (
-                figure.x - 15 < x &&
-                figure.x + 15 > x &&
-                figure.y - 15 < y &&
-                figure.y + 15 > y
-              ) {
-                this.selectFigure(figure, event);
-                return true;
-              }
-              break;
-            case FigureType.text:
-              if (
-                figure.x < x &&
-                figure.x + 100 > x &&
-                figure.y - 20 < y &&
-                figure.y + 10 > y
-              ) {
-                this.selectFigure(figure, event);
-                return true;
-              }
-              break;
-          }
-          return false;
-        });
+      let figure = this.findFigure(
+        this.dashboardService.figures,
+        event.offsetX,
+        event.offsetY
+      );
+      if (figure != null) {
+        this.selectedFigure = figure;
+        this.cursorDx = event.offsetX - figure.x;
+        this.cursorDy = event.offsetY - figure.y;
+        this.cursorStX = figure.x;
+        this.cursorStY = figure.y;
+        if (figure.figureType === FigureType.line) {
+          this.cursorDxEndLine = figure.x_width - figure.x;
+          this.cursorDyEndLine = figure.y_height - figure.y;
+        }
+      }
     }
     this.mouseUp = false;
-  }
-
-  selectFigure(figure, event) {
-    this.selectedFigure = figure;
-    this.cursorDx = event.offsetX - figure.x;
-    this.cursorDy = event.offsetY - figure.y;
-    this.cursorStX = figure.x;
-    this.cursorStY = figure.y;
-    if (figure.FigureType === FigureType.line) {
-      this.cursorDxEndLine = figure.x_width - figure.x;
-      this.cursorDyEndLine = figure.y_height - figure.y;
-    }
   }
 
   onMouseMove(event) {
     if (this.mouseUp) return;
     if (this.tool === 'arc') {
-      this.selectedFigure.radius = Math.round(
+      this.newFigure.radius = Math.round(
         Math.sqrt(
-          Math.pow(event.offsetX - this.selectedFigure.x, 2) +
-            Math.pow(event.offsetY - this.selectedFigure.y, 2)
+          Math.pow(event.offsetX - this.newFigure.x, 2) +
+            Math.pow(event.offsetY - this.newFigure.y, 2)
         )
       );
       this.painted = true;
     } else if (this.tool === 'rectangle') {
-      this.selectedFigure.x_width = event.offsetX - this.selectedFigure.x;
-      this.selectedFigure.y_height = event.offsetY - this.selectedFigure.y;
+      this.newFigure.x_width = event.offsetX - this.newFigure.x;
+      this.newFigure.y_height = event.offsetY - this.newFigure.y;
       this.painted = true;
     } else if (this.tool === 'line') {
-      this.selectedFigure.x_width = event.offsetX;
-      this.selectedFigure.y_height = event.offsetY;
+      this.newFigure.x_width = event.offsetX;
+      this.newFigure.y_height = event.offsetY;
       this.painted = true;
     } else if (this.tool === 'lines') {
-      this.selectedFigure.x_width = event.offsetX;
-      this.selectedFigure.y_height = event.offsetY;
-      this.sendFigure(this.selectedFigure);
-      this.initialNewFigure(event.offsetX, event.offsetY, this.tool);
-    } else if (this.tool === 'cursor' && this.selectedFigure !== null) {
+      this.newFigure.x_width = event.offsetX;
+      this.newFigure.y_height = event.offsetY;
+      this.sendFigure(this.newFigure);
+      let figure = this.initialNewFigure(event.offsetX, event.offsetY, this.tool);
+      figure.lineWidth = this.lineWidth;
+      this.newFigure = figure;
+    } else if (this.tool === 'cursor' && this.selectedFigure != null) {
       this.selectedFigure.x = event.offsetX - this.cursorDx;
       this.selectedFigure.y = event.offsetY - this.cursorDy;
       if (this.selectedFigure.figureType === FigureType.line) {
@@ -209,17 +192,17 @@ export class DashboardComponent implements OnInit {
       if (
         this.tool === 'arc' ||
         this.tool === 'rectangle' ||
-        this.tool === 'line'
+        this.tool === 'line' ||
+        this.tool === 'lines'
       ) {
         if (this.painted) {
-          this.dashboardService.figures.push(this.selectedFigure);
-          this.sendFigure(this.selectedFigure);
+          this.sendFigure(this.newFigure);
         }
-      } else if (this.tool === 'cursor' && this.selectedFigure !== null) {
+        this.newFigure = null;
+      } else if (this.tool === 'cursor' && this.selectedFigure != null) {
         this.sendFigure(this.selectedFigure);
+        this.selectedFigure = null;
       }
-
-      if (this.selectedFigure !== null) this.selectedFigure = null;
     }
   }
 
@@ -229,17 +212,9 @@ export class DashboardComponent implements OnInit {
 
   sendFigure(figure: Figure) {
     this.dashboardService.sendFigure(this.roomId, figure).subscribe(
-      (res: number) => {
-        figure.figureId = res;
-      },
+      () => {},
       err => {
-        if (this.tool !== 'cursor') {
-          for (let i = 0; i < this.dashboardService.figures.length; i++)
-            if (figure === this.dashboardService.figures[i]) {
-              this.dashboardService.figures.splice(i, 1);
-              break;
-            }
-        } else {
+        if (this.tool === 'cursor') {
           figure.x = this.cursorStX;
           figure.y = this.cursorStY;
         }
@@ -253,8 +228,8 @@ export class DashboardComponent implements OnInit {
     for (let figure of this.dashboardService.figures) {
       this.drawFigure(figure);
     }
-    if (this.selectedFigure != null) {
-      this.drawFigure(this.selectedFigure);
+    if (this.newFigure != null) {
+      this.drawFigure(this.newFigure);
     }
   }
 
@@ -284,8 +259,10 @@ export class DashboardComponent implements OnInit {
         this.ctx.stroke();
         break;
       case FigureType.text:
+        this.ctx.fillStyle = figure.fillColor;
         this.ctx.font = figure.fontSize + 'px ' + figure.fontName;
         if (figure.text) this.ctx.fillText(figure.text, figure.x, figure.y);
+        if (figure.text) this.ctx.strokeText(figure.text, figure.x, figure.y);
         break;
     }
     this.ctx.closePath();
@@ -293,5 +270,58 @@ export class DashboardComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.ctx) this.drawAllFigures();
+  }
+
+  findFigure(figures: Figure[], x: number, y: number): Figure {
+    for (
+      let i = figures.length - 1, figure = figures[i];
+      i >= 0;
+      figure = figures[--i]
+    ) {
+      switch (figure.figureType) {
+        case FigureType.rectangle:
+          if (
+            ((figure.x < x && x < figure.x + figure.x_width) ||
+             (figure.x > x && x > figure.x + figure.x_width)) &&
+            ((figure.y < y && y < figure.y + figure.y_height) ||
+             (figure.y > y && y > figure.y + figure.y_height))
+          )
+            return figure;
+          break;
+        case FigureType.arc:
+          let r = Math.sqrt(
+            Math.pow(x - figure.x, 2) + Math.pow(y - figure.y, 2)
+          );
+          if (figure.radius > r) return figure;
+          break;
+        case FigureType.line:
+          if (
+            figure.x - 15 < x &&
+            figure.x + 15 > x &&
+            figure.y - 15 < y &&
+            figure.y + 15 > y
+          )
+            return figure;
+          break;
+        case FigureType.text:
+          if (
+            figure.x < x &&
+            figure.x + 100 > x &&
+            figure.y - 20 < y &&
+            figure.y + 10 > y
+          )
+            return figure;
+          break;
+      }
+    }
+    return null;
+  }
+
+  onDelete(event){
+    let figure = this.findFigure(this.dashboardService.figures, event.offsetX, event.offsetY);
+    if(figure != null){
+      this.dashboardService.deleteFigure(figure.figureId).subscribe();
+    }
+    return false;
   }
 }

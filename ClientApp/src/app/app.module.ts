@@ -24,12 +24,13 @@ import { CommentItemComponent } from './main/post-list/post-item/comment-list/co
 import { SearchComponent } from './main/search/search.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { SettingsComponent } from './main/settings/settings.component';
+import { NgxUiLoaderModule } from  'ngx-ui-loader';
 import { RoomsComponent } from './rooms/rooms.component';
 import { RoomComponent } from './rooms/room/room.component';
-import { NgxUiLoaderModule } from  'ngx-ui-loader';
 import { NewRoomComponent } from './rooms/new-room/new-room.component';
 import { ChatComponent } from './rooms/room/chat/chat.component';
 import { DashboardComponent } from './rooms/room/dashboard/dashboard.component';
+import { NewFollowersPipe } from './pipes/new-followers.pipe';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { DashboardComponent } from './rooms/room/dashboard/dashboard.component';
     RoomComponent,
     NewRoomComponent,
     ChatComponent,
-    DashboardComponent
+    DashboardComponent,
+    NewFollowersPipe,
   ],
   imports: [
     CommonModule,

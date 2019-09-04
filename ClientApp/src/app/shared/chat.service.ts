@@ -24,20 +24,10 @@ export class ChatService {
 
   sendMessage(id: number, message: string){
     message = JSON.stringify(message);
-    return this.http.post(environment.remoteUrl_api + '/chat/' + id, message, {headers: {'Content-Type':'application/json'}})
-    .pipe(
-      tap(
-        (res: Message) => this.messages.push(res)
-      )
-    );
+    return this.http.post(environment.remoteUrl_api + '/chat/' + id, message, {headers: {'Content-Type':'application/json'}});
   }
 
   deleteMessage(id: number){
-    return this.http.delete(environment.remoteUrl_api + '/chat/' + id)
-    .pipe(
-      tap(
-        res => (this.messages = this.messages.filter(m => m.messageId != id))
-      )
-    );
+    return this.http.delete(environment.remoteUrl_api + '/chat/' + id);
   }
 }

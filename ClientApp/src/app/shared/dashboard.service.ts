@@ -8,22 +8,34 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class DashboardService {
-
-  constructor(private http: HttpClient) { }
-
-  figures = new Array<Figure>();
-
-  sendFigure(idRoom: number, figure: Figure){
-    return this.http.put(environment.remoteUrl_api + '/dashboard/' + idRoom, figure);
+  deletedFigure(figureId: number) {
+    this.figures = this.figures.filter(f => f.figureId !== figureId);
   }
 
-  getFigures(id: number){
-    return this.http.get(environment.remoteUrl_api + '/dashboard/' + id).pipe(
-      tap((res: Figure[]) => this.figures = res)
+  deleteFigure(figureId: number) {
+    return this.http.delete(
+      environment.remoteUrl_api + '/dashboard/' + figureId
     );
   }
 
-  receiveFigure(figure: Figure){
+  constructor(private http: HttpClient) {}
+
+  figures = new Array<Figure>();
+
+  sendFigure(idRoom: number, figure: Figure) {
+    return this.http.put(
+      environment.remoteUrl_api + '/dashboard/' + idRoom,
+      figure
+    );
+  }
+
+  getFigures(id: number) {
+    return this.http
+      .get(environment.remoteUrl_api + '/dashboard/' + id)
+      .pipe(tap((res: Figure[]) => (this.figures = res)));
+  }
+
+  receiveFigure(figure: Figure) {
     if (
       !this.figures.some((f, index) => {
         if (f.figureId == figure.figureId) {

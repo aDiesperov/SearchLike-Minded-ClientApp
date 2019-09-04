@@ -1,17 +1,17 @@
 .wrapper
     background: #a1a1a1
     min-height: 100vh
-    overflow: hidden
-    
+    padding-bottom: 10px
+
 .rooms_panel
     width: 1140px
     background: white
-    margin: 0px auto 10px
+    margin: 0px auto
     display: flex
     flex-flow: row
     flex-wrap: nowrap
     height: 600px
-    
+
     .left_bar
         flex: 0 0 50px
         background: #ebf0f2
@@ -57,7 +57,7 @@
                 border-top: 1px solid #ebf0f2
                 border-bottom: 1px solid #ebf0f2
                 height: 36px
-                
+
                 img
                     margin: 0px 15px 0 12px
 
@@ -68,20 +68,10 @@
 
             .item-list-left-bar:hover
                 background: #f9f9f9
-        
-        .live
+
+        .live_users
             .list-left-bar
                 height: 216px
-
-            button
-                background: #ebf0f2
-                display: none
-            
-            button.show
-                display: block
-            
-            button.active
-                color: red
 
             span
                 font-size: 9px
@@ -89,11 +79,11 @@
                 width: 50px
                 text-align: center
                 display: block
-                
-        .links 
+
+        .links
             position: absolute
             bottom: 0px
-            
+
             a
                 border-top: 1px solid #ebf0f2
                 border-bottom: 1px solid #ebf0f2
@@ -118,4 +108,4 @@
     main
         flex: 1 1 100%
         position: relative
-        
+

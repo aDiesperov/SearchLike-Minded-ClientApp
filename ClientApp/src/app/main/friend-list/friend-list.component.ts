@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserCard } from 'src/app/models/userCard.model';
 import { FriendService } from 'src/app/shared/friend.service';
 import { ActivatedRoute } from '@angular/router';
+import { UserService } from 'src/app/shared/user.service';
 
 @Component({
   selector: 'app-friend-list',
@@ -9,32 +10,23 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./friend-list.component.sass']
 })
 export class FriendListComponent implements OnInit {
-  constructor(private friendService: FriendService, private route: ActivatedRoute) {}
+  constructor(private friendService: FriendService, private route: ActivatedRoute, public userService: UserService) {}
 
   users: UserCard[];
-  newFollowers: UserCard[];
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.users = [];
-      this.newFollowers = [];
       switch (params.type) {
         case 'online':
-            this.friendService.getOnline().subscribe((res: UserCard[]) => {
-              this.users = res.filter(u => !u.new);
-              this.newFollowers = res.filter(u => u.new);
-            });
+          this.friendService.getOnline().subscribe((res: UserCard[]) => this.users = res);
           break;
         case 'followers':
-          this.friendService.getFollowers().subscribe((res: UserCard[]) => {
-            this.users = res.filter(u => !u.new);
-            this.newFollowers = res.filter(u => u.new);
-          });
+          this.friendService.getFollowers().subscribe((res: UserCard[]) => this.users = res);
           break;
         case 'all':
         default:
-          this.friendService.getFriends()
-            .subscribe((res: UserCard[]) => (this.users = res));
+          this.friendService.getFriends().subscribe((res: UserCard[]) => this.users = res);
           break;
       }
     });

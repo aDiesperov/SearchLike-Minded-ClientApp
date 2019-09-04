@@ -1,69 +1,137 @@
 <form [formGroup]="account.registerFormModel" (submit)="onSubmit()" autocomplete="off">
-    <div class="form-row">
-        <div class="col">
-            <!-- First name -->
-            <div class="md-form">
-                <input type="text" class="form-control" id="fname" formControlName="Fname">
-                <label for="fname" class="">First name</label>
-            </div>
-        </div>
-        <div class="col">
-            <!-- Last name -->
-            <div class="md-form">
-                <input type="text" class="form-control" id="lname" formControlName="Lname">
-                <label for="lname" class="">Last name</label>
-            </div>
-        </div>
-        <div class="col">
-            <!-- Last name -->
-            <div class="md-form">
-                <input type="text" class="form-control" id="mname" formControlName="Mname">
-                <label for="mname" class="">Middle name</label>
-            </div>
-        </div>
+  <div class="form-row">
+    <div class="col">
+      <!-- First name -->
+      <div class="md-form">
+        <input type="text" class="form-control" id="fname" formControlName="Fname">
+        <label for="fname" class="">First name</label>
+        <span class="text-danger"
+          *ngIf="account.registerFormModel.get('Fname').touched && account.registerFormModel.get('Fname').errors?.required">
+          This field is required!
+        </span>
+        <span class="text-danger"
+          *ngIf="account.registerFormModel.get('Fname').touched && account.registerFormModel.get('Fname').errors?.minlength">
+          Minimum 2 characters
+        </span>
+        <span class="text-danger"
+          *ngIf="account.registerFormModel.get('Fname').touched && account.registerFormModel.get('Fname').errors?.maxlength">
+          Maximum 30 characters
+        </span>
+      </div>
     </div>
-    <div class="form-row">
-        <div class="col-5">
-            <label for="birthday" class="">Birthday</label>
-            <input type="date" class="form-control" id="birthday" formControlName="Birthday">
-        </div>
-        <div class="col-6 offset-1">
-            <label>Sex</label>
-            <div class="btn-group-toggle d-block">
-                <label class="btn btn-default" [class.active]="account.registerFormModel.get('Sex').value == 1">
-                    <input formControlName="Sex" type="radio" name="Sex" id="sexMale" autocomplete="off" value="1">
-                    Male
-                </label>
-                <label class="btn btn-default" [class.active]="account.registerFormModel.get('Sex').value == 2">
-                    <input formControlName="Sex" type="radio" name="Sex" id="sexFemale" autocomplete="off" value="2">
-                    Female
-                </label>
-            </div>
-        </div>
+    <div class="col">
+      <!-- Last name -->
+      <div class="md-form">
+        <input type="text" class="form-control" id="lname" formControlName="Lname">
+        <label for="lname" class="">Last name</label>
+        <span class="text-danger"
+          *ngIf="account.registerFormModel.get('Lname').touched && account.registerFormModel.get('Lname').errors?.required">
+          This field is required!
+        </span>
+        <span class="text-danger"
+          *ngIf="account.registerFormModel.get('Lname').touched && account.registerFormModel.get('Lname').errors?.minlength">
+          Minimum 2 characters
+        </span>
+        <span class="text-danger"
+          *ngIf="account.registerFormModel.get('Lname').touched && account.registerFormModel.get('Lname').errors?.maxlength">
+          Maximum 30 characters
+        </span>
+      </div>
     </div>
-    <!-- E-mail -->
+    <div class="col">
+      <!-- Last name -->
+      <div class="md-form">
+        <input type="text" class="form-control" id="mname" formControlName="Mname">
+        <label for="mname" class="">Middle name</label>
+      </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="col-sm-6">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label for="birthday" class="input-group-text">Birthday</label>
+        </div>
+        <input type="date" class="form-control" id="birthday" formControlName="Birthday">
+      </div>
+      <span class="text-danger"
+        *ngIf="account.registerFormModel.get('Birthday').touched && account.registerFormModel.get('Birthday').errors?.required">
+        This field is required!
+      </span>
+    </div>
+    <div class="col-sm-5 offset-sm-1">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <label class="input-group-text">Sex</label>
+        </div>
+        <div class="btn-group-toggle">
+          <label class="btn btn-default" [class.active]="account.registerFormModel.get('Sex').value == 1">
+            <input formControlName="Sex" type="radio" name="Sex" id="sexMale" autocomplete="off" value="1">
+            <i class="fas fa-male"></i>
+          </label>
+          <label class="btn btn-default" [class.active]="account.registerFormModel.get('Sex').value == 2">
+            <input formControlName="Sex" type="radio" name="Sex" id="sexFemale" autocomplete="off" value="2">
+            <i class="fas fa-female"></i>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- E-mail -->
+  <div class="md-form">
+    <input type="email" class="form-control" id="email" formControlName="Email">
+    <label for="email">E-mail</label>
+    <span class="text-danger"
+      *ngIf="account.registerFormModel.get('Email').touched && account.registerFormModel.get('Email').errors?.required">
+      This field is required!
+    </span>
+    <span class="text-danger"
+      *ngIf="account.registerFormModel.get('Email').touched && account.registerFormModel.get('Email').errors?.email">
+      Invalid email address!
+    </span>
+  </div>
+
+  <!-- Passwords -->
+  <div formGroupName="Passwords">
+    <!-- Password -->
     <div class="md-form">
-        <input type="email" class="form-control" id="email" formControlName="Email">
-        <label for="email">E-mail</label>
+      <input type="password" class="form-control" id="password" formControlName="Password">
+      <label for="password">Password</label>
+      <span class="text-danger"
+        *ngIf="account.registerFormModel.get('Passwords.Password').touched && account.registerFormModel.get('Passwords.Password').errors?.required">
+        This field is required!
+      </span>
+      <span class="text-danger d-block"
+        *ngIf="account.registerFormModel.get('Passwords.Password').touched && account.registerFormModel.get('Passwords.Password').errors?.minlength">
+        Minimum 5 characters
+      </span>
+      <span class="text-danger d-block"
+        *ngIf="account.registerFormModel.get('Passwords.Password').touched && account.registerFormModel.get('Passwords.Password').errors?.maxlength">
+        Maximum 20 characters
+      </span>
+      <span class="text-danger d-block"
+        *ngIf="account.registerFormModel.get('Passwords.Password').touched && account.registerFormModel.get('Passwords.Password').errors?.pattern">
+        Password must contain at least one lowercase letter
+      </span>
     </div>
 
-    <!-- Passwords -->
-    <div formGroupName="Passwords">
-        <!-- Password -->
-        <div class="md-form">
-            <input type="password" class="form-control" id="password" formControlName="Password">
-            <label for="password">Password</label>
-        </div>
-
-        <!-- Confirm password -->
-        <div class="md-form">
-            <input type="password" class="form-control" id="password_c" formControlName="PasswordConfirm">
-            <label for="password_c">Confirm password</label>
-        </div>
+    <!-- Confirm password -->
+    <div class="md-form">
+      <input type="password" class="form-control" id="password_c" formControlName="PasswordConfirm">
+      <label for="password_c">Confirm password</label>
+      <span class="text-danger"
+        *ngIf="account.registerFormModel.get('Passwords.PasswordConfirm').touched && account.registerFormModel.get('Passwords.PasswordConfirm').errors?.required">
+        This field is required!
+      </span>
+      <span class="text-danger"
+        *ngIf="account.registerFormModel.get('Passwords.PasswordConfirm').touched && account.registerFormModel.get('Passwords.PasswordConfirm').errors?.passMismatch">
+        Passwords don't match!
+      </span>
     </div>
-    <!-- Sign up button -->
-    <div class="text-center">
-        <input type="submit" class="btn btn-primary my-4 waves-effect" [disabled]="account.registerFormModel.invalid"
-            value="Sing Up">
-    </div>
+  </div>
+  <!-- Sign up button -->
+  <div class="text-center">
+    <input type="submit" class="btn btn-primary my-4 waves-effect" [disabled]="account.registerFormModel.invalid"
+      value="Sing Up">
+  </div>
 </form>

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { PostService } from '../../../shared/post.service';
 import { environment } from 'src/environments/environment';
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-post-item',
@@ -13,37 +14,30 @@ export class PostItemComponent implements OnInit {
 
   get Environment(){ return environment}
 
-  @Input() Post: {
-    comments: number,
-    postDate: string,
-    postId: number,
-    likes: number,
-    myLike: boolean
-  };
+  @Input() post: Post;
   @Input() AccessDelelete: boolean;
 
   ngOnInit() {
-    this.Post.postDate = new Date(this.Post.postDate).toLocaleString();
+    this.post.postDate = new Date(this.post.postDate).toLocaleString();
   }
 
   onDelete() {
-    this.service.delPost(this.Post.postId).subscribe(
+    this.service.delPost(this.post.postId).subscribe(
       res => this.elementRef.nativeElement.remove(),
       err => {}
     );
   }
 
   changeComments(d: number) {
-    this.Post.comments += + d;
+    this.post.comments += + d;
   }
 
   onLike() {
-    this.service.likePost(this.Post.postId).subscribe(
+    this.service.likePost(this.post.postId).subscribe(
       res => {
-        this.Post.likes += this.Post.myLike ? -1 : 1;
-        this.Post.myLike = !this.Post.myLike;
-      },
-      err => {}
+        this.post.likes += this.post.myLike ? -1 : 1;
+        this.post.myLike = !this.post.myLike;
+      }
     );
     return false;
   }

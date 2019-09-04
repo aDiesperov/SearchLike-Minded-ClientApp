@@ -1,46 +1,110 @@
-<canvas width="748" height="600" (mouseleave)="onMouseLeave()" (mousemove)="onMouseMove($event)"
-    (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp()">
+<div class="canvas-wrapper">
+  <canvas width="748" height="600" (mouseleave)="onMouseLeave()" (mousemove)="onMouseMove($event)"
+    (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp()" (contextmenu)="onDelete($event)">
     canvas dont't support
-</canvas>
+  </canvas>
+</div>
+
 <div class="top-panel">
-    <div class="tools">
-        <input checked type="radio" name="tool" value="cursor" id="cursorTool">
-        <label for="cursorTool">
-            <i class="fas fa-mouse-pointer"></i> Pointer
-        </label>
-        <input type="radio" name="tool" value="text" id="textTool">
-        <label for="textTool">
-            <i class="fas fa-font"></i> Text
-        </label>
-        <input type="radio" name="tool" value="rectangle" id="rectangleTool">
-        <label for="rectangleTool">
-            <i class="far fa-square"></i> Rectangle
-        </label>
-        <input type="radio" name="tool" value="arc" id="arcTool">
-        <label for="arcTool">
-            <i class="far fa-circle"></i> Circle
-        </label>
-        <input type="radio" name="tool" value="line" id="lineTool">
-        <label for="lineTool">
-            <i class="fas fa-grip-lines-vertical"></i> Line
-        </label>
-        <input type="radio" name="tool" value="lines" id="paintTool">
-        <label for="paintTool">
-            <i class="fas fa-paint-brush"></i> Paint
-        </label>
-        <input type="color" id="colorTool">
-        <label for="colorTool">
-            <i class="fas fa-tools"></i> Settings
-        </label>
-    </div>
-    <div class="live">
-        <button id="live_video">
-            <i class="fas fa-video"></i>
-            
+  <div class="tools">
+    <input checked type="radio" name="tool" value="cursor" id="cursorTool">
+    <label for="cursorTool">
+      <i class="fas fa-mouse-pointer"></i> Pointer
+    </label>
+    <input type="radio" name="tool" value="text" id="textTool">
+    <label for="textTool">
+      <i class="fas fa-font"></i> Text
+    </label>
+    <input type="radio" name="tool" value="rectangle" id="rectangleTool">
+    <label for="rectangleTool">
+      <i class="far fa-square"></i> Rectangle
+    </label>
+    <input type="radio" name="tool" value="arc" id="arcTool">
+    <label for="arcTool">
+      <i class="far fa-circle"></i> Circle
+    </label>
+    <input type="radio" name="tool" value="line" id="lineTool">
+    <label for="lineTool">
+      <i class="fas fa-grip-lines-vertical"></i> Line
+    </label>
+    <input type="radio" name="tool" value="lines" id="paintTool">
+    <label for="paintTool">
+      <i class="fas fa-paint-brush"></i> Paint
+    </label>
+    <input type="color" id="settingsTool" data-toggle="modal" data-target="#exampleModal" type="button">
+    <label for="settingsTool">
+      <i class="fas fa-tools"></i> Settings
+    </label>
+  </div>
+  <div class="live">
+    <button id="live_video">
+      <i class="fas fa-video"></i>
+    </button>
+    <button id="live_audio">
+      <i class="fas fa-microphone"></i>
+    </button>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Settings</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
         </button>
-        <button id="live_audio">
-            <i class="fas fa-microphone"></i>
-            
-        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group input-group">
+            <div class="input-group-append">
+              <label class="input-group-text">Stroke color:
+                  <input type="checkbox" class="form-check-input" name="enabledStrokeColor" [(ngModel)]="enabledStrokeColor">
+              </label>
+            </div>
+            <input type="color" name="strokeColor" [(ngModel)]="strokeColor" [disabled]="!enabledStrokeColor" class="form-control">
+          </div>
+          <div class="form-group input-group">
+            <div class="input-group-append">
+              <label class="input-group-text">Fill color:
+                  <input type="checkbox" class="form-check-input" name="enabledFillColor" [(ngModel)]="enabledFillColor">
+              </label>
+            </div>
+            <input type="color" name="fillColor" [(ngModel)]="fillColor" [disabled]="!enabledFillColor" class="form-control">
+          </div>
+          <div class="form-group input-group">
+            <div class="input-group-append">
+              <label class="input-group-text">Line width: {{lineWidth}}</label>
+            </div>
+            <input type="range" min="1" max="25" step="1" name="lineWidthh" [(ngModel)]="lineWidth"
+              class="form-control">
+          </div>
+          <div class="form-group input-group">
+            <div class="input-group-append">
+              <label class="input-group-text">Font size: {{fontSize}}</label>
+            </div>
+            <input type="range" min="5" max="100" step="1" name="fontSize" [(ngModel)]="fontSize"
+              class="form-control">
+          </div>
+          <div class="form-group input-group">
+            <div class="input-group-append">
+              <label class="input-group-text">Font name: </label>
+            </div>
+            <select name="fontName" [(ngModel)]="fontName" class="form-control">
+              <option value="Arial">Arial</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Courier New">Courier New</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Georgia">Georgia</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
     </div>
+  </div>
 </div>

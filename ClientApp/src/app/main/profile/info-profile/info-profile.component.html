@@ -7,7 +7,7 @@
             <i class="fas fa-edit mr-2"></i>Edit
         </button>
     </div>
-    <div class="info-profile pl-5 col-9">
+    <div class="info-profile pl-3 col-9">
         <h1 class="mb-0">{{profileInfo?.fname}} {{profileInfo?.mname}} {{profileInfo?.lname}}</h1>
         <a *ngIf="!(UserId !== profileId && !profileInfo?.status)"
             href="#">{{profileInfo?.status ? profileInfo.status : 'set a status message'}}</a>

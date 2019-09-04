@@ -10,7 +10,7 @@ import { UserService } from "src/app/shared/user.service";
 })
 export class RegisterComponent implements OnInit {
   constructor(
-    private account: UserService,
+    public account: UserService,
     private toastr: ToastrService,
     private router: Router
   ) {}

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(private service: UserService, private router: Router) { 
+  constructor(public service: UserService, private router: Router) { 
     service.getSettings();
   }
 

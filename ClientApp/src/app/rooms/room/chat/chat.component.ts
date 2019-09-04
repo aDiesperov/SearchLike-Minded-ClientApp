@@ -16,9 +16,9 @@ export class ChatComponent implements OnInit {
 
   constructor(
     signalrService: SignalrService,
-    private chatService: ChatService
+    public chatService: ChatService
   ) {
-    signalrService.connection.on(
+    signalrService.Connection.on(
       'receiveMessage',
       (message: Message, room: number) => {
         if (room === this.roomId) {
@@ -27,7 +27,7 @@ export class ChatComponent implements OnInit {
         }
       }
     );
-    signalrService.connection.on('deleteMessage', (messageId: number) => {
+    signalrService.Connection.on('deleteMessage', (messageId: number) => {
       this.chatService.messages = this.chatService.messages.filter(
         m => m.messageId !== messageId
       );

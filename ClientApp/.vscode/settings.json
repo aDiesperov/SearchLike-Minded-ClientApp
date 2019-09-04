@@ -1,0 +1,7 @@
+{
+    "appService.zipIgnorePattern": [
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/e0648b9e-2896-4e16-8530-62a08d34dcf8/resourceGroups/DiesperovClientApp/providers/Microsoft.Web/sites/diplom",
+    "appService.deploySubpath": "dist\\ClientApp"
+}

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgModuleRef, PlatformRef, ContentChild, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../shared/user.service';
 import { MyInfo } from '../models/myInfo.model';
 import { SignalrService } from '../shared/signalr.service';
 import { environment } from 'src/environments/environment';
+import { RoomService } from '../shared/room.service';
+import { FriendListComponent } from './friend-list/friend-list.component';
 
 @Component({
   selector: 'app-main',
@@ -11,19 +13,22 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./main.component.sass']
 })
 export class MainComponent implements OnInit {
+  get Environment() {
+    return environment;
+  }
 
-  get Environment(){return environment}
-  
-  constructor(private router: Router, userService: UserService, private signalrService: SignalrService) {
+  constructor(
+    private router: Router,
+    public userService: UserService,
+    private signalrService: SignalrService,
+    public roomService: RoomService
+  ) {
     this.UserId = +JSON.parse(
       window.atob(localStorage.getItem('Token').split('.')[1])
     ).UserId;
 
-    userService.getMyInfo().subscribe(
-      (res: MyInfo) => {
-        this.myInfo = res;
-        localStorage.setItem('avatar', res.avatar);
-      },
+    this.userService.getMyInfo().subscribe(
+      res => {},
       err => {
         if (err.status === 404) {
           localStorage.clear();
@@ -31,21 +36,24 @@ export class MainComponent implements OnInit {
         }
       }
     );
+
+    this.roomService.getRooms().subscribe();
   }
 
-  myInfo: MyInfo;
   UserId: number;
   textSearch: string;
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.signalrService.connect();
+  }
 
   ngDoCheck(): void {
     if (
-      this.myInfo !== undefined &&
-      this.myInfo.newFollowers > 0 &&
+      this.userService.myInfo !== undefined &&
+      this.userService.myInfo.newFollowers > 0 &&
       this.router.url.indexOf('followers') > 0
     ) {
-      this.myInfo.newFollowers = 0;
+      this.userService.myInfo.newFollowers = 0;
     }
   }
 
@@ -57,6 +65,7 @@ export class MainComponent implements OnInit {
 
   onExit() {
     localStorage.clear();
+    this.signalrService.Connection = null;
     this.router.navigateByUrl('/login');
     return false;
   }

@@ -1,18 +1,18 @@
 <div class="chat">
     <div class="msg_history">
-        <div *ngFor="let message of messages">
+        <div *ngFor="let message of chatService.messages">
             <div *ngIf="!message.my" class="incoming_msg">
                 <div class="incoming_msg_img"><img src="{{Environment.remoteUrl + '/' + message.avatar}}" alt="sunil">
                 </div>
                 <div class="received_msg">
                     <p>{{message.text}}</p>
-                    <span class="time_date"> 11:01 AM | June 9</span>
+                    <span class="time_date"> {{message.sent | date : 'shortTime'}} | {{message.sent | date: 'mediumDate'}}</span>
                 </div>
             </div>
             <div *ngIf="message.my" (click)='onDelete(message.messageId)' class="outgoing_msg">
                 <div class="sent_msg">
                     <p>{{message.text}}</p>
-                    <span class="time_date"> {{message.sent | date: 'shortTime'}} | {{message.sent | date: 'MMMM d'}}</span>
+                    <span class="time_date"> {{message.sent | date: 'shortTime'}} | {{message.sent | date: 'mediumDate'}}</span>
                 </div>
             </div>
         </div>
